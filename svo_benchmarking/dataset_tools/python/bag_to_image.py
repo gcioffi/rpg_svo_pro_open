@@ -1,5 +1,4 @@
-#!/usr/bin/python2
-
+import os
 import rosbag
 import argparse
 import cv2
@@ -13,16 +12,18 @@ def extract(bagfile, pose_topic, out_filename, cam_id):
     cv_bridge = CvBridge()
     extract_every_nth_image = 1
     #max_imgs = 400
+    timestamps = []
 
     with rosbag.Bag(bagfile, 'r') as bag:
         for (topic, msg, ts) in bag.read_messages(topics=str(pose_topic)):
             if np.mod(n, extract_every_nth_image) == 0:
                 try:
                     img = cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
-                except CvBridgeError, e:
-                    print e
+                except CvBridgeError as e:
+                    print(e)
                     
                 ts = msg.header.stamp.to_sec()
+                timestamps.append(ts)
                 image_name = 'image_'+str(cam_id)+'_'+str(n)+'.png'
                 f.write('%d %.12f img/%s \n' % (n, ts, image_name))
                 cv2.imwrite(image_name, img)
@@ -31,6 +32,15 @@ def extract(bagfile, pose_topic, out_filename, cam_id):
             #    break
             
     print('wrote ' + str(n) + ' images messages to the file: ' + out_filename)
+    f.close()
+
+    # Save only image timestamps
+    outdir = os.path.dirname(out_filename)
+    outfn = os.path.join(outdir, 'cam0_timestamps')
+    f = open(outfn, 'w')
+    for t in timestamps:
+        f.write('%.12f\n' % t)
+    f.close()
           
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='''

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 @author: Christian Forster
 """
@@ -56,8 +56,8 @@ def run_single_experiment(params, node='svo_ros', node_name='benchmark'):
     dataset_params_file = os.path.join(params['dataset_directory'],
                                        'dataset.yaml')
     if os.path.exists(dataset_params_file):
-        dataset_params = yaml.load(open(dataset_params_file, 'r'))
-        params = dict(params.items() + dataset_params.items())
+        dataset_params = yaml.load(open(dataset_params_file, 'r'), Loader=yaml.Loader)
+        params = dict(params.items() | dataset_params.items())
 
     # Check that calibration file exists
     calib_name = 'calib.yaml'
@@ -96,7 +96,7 @@ def run_experiments(experiment_file, num_monte_carlo_runs=None,
         'experiments', experiment_file+'.yaml')
 
     # Load base algorithm parameters.
-    experiment_params = yaml.load(open(experiment_params_file, 'r'))
+    experiment_params = yaml.load(open(experiment_params_file, 'r'), Loader=yaml.Loader)
     base_params = dict()
     base_params['experiment_label'] = experiment_params['experiment_label']
     base_params['time'] = time.strftime("%Y%m%d_%H%M%S", time.localtime())
@@ -107,8 +107,7 @@ def run_experiments(experiment_file, num_monte_carlo_runs=None,
 
     # pipeline parameters
     if 'settings' in experiment_params:
-        base_params = dict(base_params.items() +
-                           experiment_params['settings'].items())
+        base_params = dict(base_params.items() | experiment_params['settings'].items())
     # benchmark node flag: verbosity, etc.
     if 'flags' in experiment_params:
         base_params['flags'] = experiment_params['flags']
@@ -154,8 +153,8 @@ def run_experiments(experiment_file, num_monte_carlo_runs=None,
         dataset_params_file = os.path.join(cur_params['dataset_directory'],
                                            'dataset.yaml')
         if os.path.exists(dataset_params_file):
-            dataset_params = yaml.load(open(dataset_params_file, 'r'))
-            cur_params = dict(cur_params.items() + dataset_params.items())
+            dataset_params = yaml.load(open(dataset_params_file, 'r'), Loader=yaml.Loader)
+            cur_params = dict(cur_params.items() | dataset_params.items())
         else:
             cur_params['dataset_name'] = dataset_cfg['name']
 
