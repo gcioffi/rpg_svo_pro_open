@@ -247,7 +247,8 @@ bool BenchmarkNode::loadNextImages(const std::string& dataset_basedir,
   {
     std::string img_name;
     img_fs >> img_name;
-    std::string img_filename(dataset_basedir + "/data/" + img_name);
+    // std::string img_filename(dataset_basedir + "/data/" + img_name);
+    std::string img_filename(dataset_basedir + "/" + img_name);
     cv::Mat img(cv::imread(img_filename, 0));
     if (img.empty())
     {
@@ -272,7 +273,8 @@ void BenchmarkNode::runBenchmark(const std::string& dataset_dir)
   // Load imu messages.
   if (imu_handler_)
   {
-    std::string imu_filename(dataset_dir + "/data/imu.txt");
+    // std::string imu_filename(dataset_dir + "/data/imu.txt");
+    std::string imu_filename(dataset_dir + "/imu.txt");
     if (!imu_handler_->loadImuMeasurementsFromFile(imu_filename))
     {
       return;
@@ -280,7 +282,8 @@ void BenchmarkNode::runBenchmark(const std::string& dataset_dir)
   }
 
   // Load images.
-  std::string img_filename(dataset_dir + "/data/images.txt");
+  // std::string img_filename(dataset_dir + "/data/images.txt");
+  std::string img_filename(dataset_dir + "/images.txt");
   std::ifstream img_fs(img_filename.c_str());
   if (!img_fs.is_open())
   {

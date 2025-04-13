@@ -140,7 +140,7 @@ settings:
 ##### List of Datasets #####
 ############################
 datasets:
-  - name: euroc/mono/MH_01
+  - name: EuRoC/MH_01_easy/mav0/cam0
     settings:
       dataset_first_frame: 430
       dataset_last_frame: 3659
