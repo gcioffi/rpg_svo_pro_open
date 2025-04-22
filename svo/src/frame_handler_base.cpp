@@ -171,7 +171,12 @@ bool FrameHandlerBase::addImageBundle(const std::vector<cv::Mat>& imgs, const ui
   {
     // at first iteration initialize tracing if enabled
     if (options_.trace_statistics)
-      bundle_adjustment_->setPerformanceMonitor(options_.trace_dir);
+    {
+      if (isBackendValid())
+      {
+        bundle_adjustment_->setPerformanceMonitor(options_.trace_dir);
+      }
+    }
   }
   if (options_.trace_statistics)
   {
@@ -305,7 +310,7 @@ bool FrameHandlerBase::addFrameBundle(const FrameBundlePtr& frame_bundle)
       else
       {
         map_->getKeyFrameAt(0)->is_stable_ = false;
-        SVO_WARN_STREAM("Backend scale not stable.");
+        // SVO_WARN_STREAM("Backend scale not stable.");
       }
     }
   }
@@ -510,6 +515,7 @@ bool FrameHandlerBase::addFrameBundle(const FrameBundlePtr& frame_bundle)
     {
       VLOG(2) << "Relocalization failed "
               << options_.relocalization_max_trials << " times: RESET.";
+      SVO_INFO_STREAM("Relocalization failed reset frontend.");              
       set_reset_ = true;
       backend_reinit_ = true;
 

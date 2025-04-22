@@ -80,7 +80,7 @@ def run_single_experiment(params, node='svo_ros', node_name='benchmark'):
                                             'params_ros.yaml'))
 
     # dump experiment params to file and copy the other parameter files:
-    params['platform'] = get_cpu_info()
+    # params['platform'] = get_cpu_info()
     params['ros_node'] = node
     params['ros_node_name'] = node_name
     params_dump_file = os.path.join(params['trace_dir'], 'params.yaml')

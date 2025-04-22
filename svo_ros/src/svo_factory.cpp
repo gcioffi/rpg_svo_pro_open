@@ -73,6 +73,7 @@ BaseOptions loadBaseOptions(const ros::NodeHandle& pnh, bool forward_default)
       vk::param<bool>(pnh, "update_seeds_with_old_keyframes", true);
   o.use_async_reprojectors = vk::param<bool>(pnh, "use_async_reprojectors", false);
   o.trace_statistics = vk::param<bool>(pnh, "trace_statistics", false);
+  o.trace_dir = vk::param<std::string>(pnh, "trace_dir", "/tmp");
   o.backend_scale_stable_thresh =
       vk::param<double>(pnh, "backend_scale_stable_thresh", 0.02);
   o.global_map_lc_timeout_sec_ =
